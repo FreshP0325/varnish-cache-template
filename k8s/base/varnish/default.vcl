@@ -42,7 +42,7 @@ sub vcl_backend_response {
 #
 # Purpose: You can do accounting logic or modify the final object here.
 sub vcl_deliver {
-    set resp.http.X-Section-Varnish-Cache = "True";
+    set resp.http.X-Varnish-Cache = "true";
 }
 
 # Method: vcl_hash
