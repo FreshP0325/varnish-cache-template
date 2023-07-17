@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: egress-router
+  labels:
+    app: egress-router
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: egress-router
+  template:
+    metadata:
+      labels:
+        app: egress-router
+    spec:
+      containers:
+      - name: egress-router
+        image: ghcr.io/${IMAGE_NAME}:main
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "100m"
+          limits:
+            memory: "100Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 80

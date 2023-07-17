@@ -1,0 +1,4 @@
+resources:
+- ./varnish/
+- ./egress/
+- ingress-upstream.yaml

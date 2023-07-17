@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: section-project-deployment
+  labels:
+    app: console-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: console-project
+  template:
+    metadata:
+      labels:
+        app: console-project
+    spec:
+      containers:
+        - name: console-project
+          image: sectionio/varnish-cache-kei:latest
+          imagePullPolicy: Always
+          args:
+            - -p
+            - http_resp_hdr_len=131072
+            - -p
+            - http_resp_size=131072
+            - -p
+            - syslog_cli_traffic=off
+            - -p
+            - workspace_backend=229376
+            - -p
+            - workspace_client=131072
+          env:
+            - name: NATS_URL
+              value: nats://section-nats:4222
+            - name: NATS_SUBJECT
+              value: varnish
+            - name: VARNISHNCSA_ARGS
+              value: "-E"
+            - name: VARNISH_SIZE
+              value: "100M"
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "200Mi"
+            limits:
+              cpu: "200m"
+              memory: "200Mi"
+          ports:
+            - containerPort: 80
+          securityContext:
+            #allowPrivilegeEscalation: false # not compatible with setcap
+            #runAsNonRoot: true # not compatible with non-numeric user in Dockerfile
+          volumeMounts:
+            - name: vcl
+              mountPath: /etc/varnish/
+              readOnly: true
+          #TODO /var/lib/varnish/varnishd #:exec
+      volumes:
+        - name: vcl
+          configMap:
+            name: vcl
