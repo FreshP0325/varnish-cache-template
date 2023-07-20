@@ -11,6 +11,9 @@ sub vcl_init {
     # set up a dynamic director
     # for more info, see https://github.com/nigoroll/libvmod-dynamic/blob/master/src/vmod_dynamic.vcc
     new d = dynamic.director(port = "80", ttl = 60s);
+}
+
+sub vcl_init {
     brotli.init(BOTH, transcode = true);
 }
 
