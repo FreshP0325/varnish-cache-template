@@ -1,7 +1,6 @@
 vcl 4.1;
 
 import dynamic;
-import brotli;
 
 backend default none;
 
