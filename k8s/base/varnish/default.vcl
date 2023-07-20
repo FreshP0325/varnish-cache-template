@@ -13,10 +13,6 @@ sub vcl_init {
     new d = dynamic.director(port = "80", ttl = 60s);
 }
 
-sub vcl_init {
-    brotli.init(BOTH, transcode = true);
-}
-
 sub vcl_recv {
     set req.backend_hint = d.backend("egress-router");
 }
